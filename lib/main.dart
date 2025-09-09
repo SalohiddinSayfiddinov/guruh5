@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:guruh5/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:guruh5/features/auth/presentation/pages/sign_up_page.dart';
 import 'package:guruh5/features/home/presentation/cubit/counter_cubit.dart';
 import 'package:guruh5/features/home/presentation/cubit/home_cubit.dart';
 import 'package:guruh5/features/home/presentation/cubit/post_cubit.dart';
-import 'package:guruh5/features/onboarding/pages/onboarding_page.dart';
 // import 'package:yandex_maps_mapkit_lite/init.dart';
 
 void main() async {
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
       ),
       home: MultiBlocProvider(
         providers: [
-          BlocProvider(create: (context) => CounterCubit()),
+          BlocProvider(create: (context) => AuthCubit()),
           BlocProvider(create: (context) => HomeCubit()),
           BlocProvider(create: (context) => PostCubit()),
         ],
