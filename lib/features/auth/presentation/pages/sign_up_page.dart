@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guruh5/core/theme/app_text_styles.dart';
 import 'package:guruh5/core/widgets/app_buttons.dart';
-import 'package:guruh5/features/auth/data/repositories/auth_repo.dart';
 import 'package:guruh5/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:guruh5/features/auth/presentation/cubit/auth_state.dart';
+import 'package:guruh5/features/auth/presentation/pages/verify_page.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -109,26 +109,35 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
       bottomNavigationBar: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
-          if (state.error != null) {
+          if (state is AuthError) {
             ScaffoldMessenger.of(
               context,
-            ).showSnackBar(SnackBar(content: Text(state.error!)));
+            ).showSnackBar(SnackBar(content: Text(state.error)));
           }
-          if (state.message != null) {
+          if (state is AuthSuccess) {
             ScaffoldMessenger.of(
               context,
-            ).showSnackBar(SnackBar(content: Text(state.message!)));
+            ).showSnackBar(SnackBar(content: Text(state.message)));
 
-            // Navigator();
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder:
+                    (context) => BlocProvider(
+                      create: (context) => AuthCubit(),
+                      child: VerifyPage(email: _emailController.text.trim()),
+                    ),
+              ),
+            );
           }
         },
         builder: (context, state) {
           return Padding(
             padding: EdgeInsets.all(24.0).copyWith(bottom: 40.0),
             child: PrimaryButton(
-              title: state.isLoading ? 'Loading...' : 'Sign Up',
+              title: state is AuthLoading ? 'Loading...' : 'Sign Up',
               onPressed:
-                  state.isLoading ||
+                  state is AuthLoading ||
                           !hasMinimum() ||
                           !hasNumber() ||
                           !hasLowerAndUpper()

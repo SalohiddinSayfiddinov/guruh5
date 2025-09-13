@@ -7,4 +7,5 @@ class Api {
   /// ENDPOINTS
   // auth
   static const String signUp = "$baseUrl/auth/signup";
+  static const String verify = "$baseUrl/auth/verify";
 }
