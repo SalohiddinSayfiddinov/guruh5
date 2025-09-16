@@ -1,9 +1,21 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:guruh5/features/home/presentation/cubit/home_state.dart';
+import 'package:guruh5/core/error/failure.dart';
+import 'package:guruh5/features/home/data/models/book_model.dart';
+import 'package:guruh5/features/home/data/repos/books_repo.dart';
+
+part 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
-  HomeCubit() : super(HomeState(count: 0, isDark: false));
+  HomeCubit() : super(HomeInit());
 
-  void increment() => emit(state.copyWith(count: state.count + 1));
-  void changeMode() => emit(state.copyWith(isDark: !state.isDark));
+  Future<void> getBooks() async {
+    emit(HomeLoading());
+    final Either<Failure, List<BookModel>> result =
+        await BooksRepo().getBooks();
+    result.fold(
+      (failure) => emit(HomeError(error: failure.message)),
+      (books) => emit(HomeSuccess(books: books)),
+    );
+  }
 }

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:guruh5/features/auth/data/models/user_model.dart';
-import 'package:guruh5/features/auth/presentation/provider/user_provider.dart';
-import 'package:guruh5/features/home/presentation/pages/home_page.dart';
-import 'package:guruh5/features/home/presentation/provider/post_provider.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:guruh5/features/auth/presentation/cubit/auth_cubit.dart';
+import 'package:guruh5/features/auth/presentation/cubit/auth_state.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -13,17 +11,15 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _lastNameController = TextEditingController();
-  final TextEditingController _cityController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
     super.dispose();
-    _nameController.dispose();
-    _lastNameController.dispose();
-    _cityController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
   }
 
   @override
@@ -41,13 +37,13 @@ class _LoginPageState extends State<LoginPage> {
             ),
             _buildInputField(
               context,
-              _nameController,
-              'Name',
-              'Enter your name',
+              _emailController,
+              'Email',
+              'Enter your email',
               validator: (value) {
                 if (value != null) {
                   if (value.isEmpty) {
-                    return "Iltimos ism kiriting";
+                    return "Iltimos email kiriting";
                   }
                 }
                 return null;
@@ -55,27 +51,13 @@ class _LoginPageState extends State<LoginPage> {
             ),
             _buildInputField(
               context,
-              _lastNameController,
-              'Last name',
-              'Enter your last name',
+              _passwordController,
+              'Password',
+              'Enter your Password',
               validator: (value) {
                 if (value != null) {
                   if (value.isEmpty) {
-                    return "Iltimos familiya kiriting";
-                  }
-                }
-                return null;
-              },
-            ),
-            _buildInputField(
-              context,
-              _cityController,
-              'City',
-              'Where do you live',
-              validator: (value) {
-                if (value != null) {
-                  if (value.isEmpty) {
-                    return "Iltimos shaxar kiriting";
+                    return "Iltimos parol kiriting";
                   }
                 }
                 return null;
@@ -84,51 +66,36 @@ class _LoginPageState extends State<LoginPage> {
           ],
         ),
       ),
-      bottomNavigationBar: Consumer<UserProvider>(
-        builder: (context, provider, _) {
+      bottomNavigationBar: BlocConsumer<AuthCubit, AuthState>(
+        listener: (context, state) {
+          if (state is AuthError) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.error)));
+          } else if (state is AuthSuccess) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.message)));
+
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(builder: (context) => HomePage()),
+            // );
+          }
+        },
+        builder: (context, state) {
           return Padding(
             padding: EdgeInsets.all(22.0).copyWith(bottom: 30.0),
             child: SizedBox(
               width: double.infinity,
               height: 44.0,
               child: ElevatedButton(
-                onPressed:
-                    provider.isLoggingIn
-                        ? null
-                        : () async {
-                          if (_formKey.currentState?.validate() ?? false) {
-                            final User user = User(
-                              id: '',
-                              name: _nameController.text.trim(),
-                              lastname: _lastNameController.text.trim(),
-                              city: _cityController.text.trim(),
-                            );
-                            await context.read<UserProvider>().login(user);
-
-                            if (provider.loginSuccess != null) {
-                              Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                  builder:
-                                      (context) => ChangeNotifierProvider(
-                                        create: (context) => PostProvider(),
-                                        child: HomePage(),
-                                      ),
-                                ),
-                                (route) => false,
-                              );
-                            } else {
-                              print('Else ishladi');
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  duration: Duration(seconds: 1),
-                                  content: Text(provider.loginError!),
-                                  backgroundColor: Colors.red,
-                                ),
-                              );
-                            }
-                          }
-                        },
+                onPressed: () {
+                  context.read<AuthCubit>().login(
+                    email: _emailController.text,
+                    password: _passwordController.text,
+                  );
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                   foregroundColor: Colors.white,
@@ -137,7 +104,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 child:
-                    provider.isLoggingIn
+                    state is AuthLoading
                         ? CircularProgressIndicator.adaptive()
                         : Text('Login'),
               ),

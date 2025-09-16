@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:guruh5/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:guruh5/features/auth/presentation/pages/login_page.dart';
-import 'package:guruh5/features/auth/presentation/provider/user_provider.dart';
+import 'package:guruh5/features/home/presentation/cubit/home_cubit.dart';
 import 'package:guruh5/features/home/presentation/pages/home_page.dart';
-import 'package:guruh5/features/home/presentation/provider/post_provider.dart';
-import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -19,44 +20,35 @@ class _SplashPageState extends State<SplashPage> {
     init();
   }
 
-  void init() {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await context.read<UserProvider>().getUsers();
-      final users = context.read<UserProvider>().users;
-      if (users != null) {
-        bool hasRegistered = false;
-        for (var element in users) {
-          if (element.name.toLowerCase() == 'john') {
-            hasRegistered = true;
-          }
-        }
-        if (hasRegistered) {
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder:
-                  (context) => ChangeNotifierProvider(
-                    create: (context) => PostProvider(),
-                    child: HomePage(),
-                  ),
-            ),
-            (route) => false,
-          );
-        } else {
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder:
-                  (context) => ChangeNotifierProvider(
-                    create: (context) => UserProvider(),
-                    child: LoginPage(),
-                  ),
-            ),
-            (route) => false,
-          );
-        }
-      }
-    });
+  void init() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? token = prefs.getString('token');
+
+    if (token != null) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder:
+              (context) => BlocProvider(
+                create: (context) => HomeCubit(),
+                child: HomePage(),
+              ),
+        ),
+        (route) => false,
+      );
+    } else {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder:
+              (context) => BlocProvider(
+                create: (context) => AuthCubit(),
+                child: LoginPage(),
+              ),
+        ),
+        (route) => false,
+      );
+    }
   }
 
   @override

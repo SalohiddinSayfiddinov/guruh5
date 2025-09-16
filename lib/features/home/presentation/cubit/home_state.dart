@@ -1,10 +1,23 @@
-class HomeState {
-  final int count;
-  final bool isDark;
+part of 'home_cubit.dart';
 
-  const HomeState({required this.count, required this.isDark});
+abstract class HomeState {
+  const HomeState();
+}
 
-  HomeState copyWith({int? count, bool? isDark}) {
-    return HomeState(count: count ?? this.count, isDark: isDark ?? this.isDark);
-  }
+class HomeInit extends HomeState {
+  const HomeInit();
+}
+
+class HomeLoading extends HomeState {
+  const HomeLoading();
+}
+
+class HomeError extends HomeState {
+  final String error;
+  const HomeError({required this.error});
+}
+
+class HomeSuccess extends HomeState {
+  final List<BookModel> books;
+  const HomeSuccess({required this.books});
 }

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:guruh5/core/api/api.dart';
 import 'package:guruh5/core/services/error_handler.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthRepo {
   Future<String> signUp({
@@ -42,6 +43,29 @@ class AuthRepo {
       final data = jsonDecode(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {
         return data['msg'];
+      }
+      throw parseDjangoError(data);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> login({required String email, required String password}) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    try {
+      final response = await http.post(
+        Uri.parse(Api.login),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: jsonEncode({"email": email, "password": password}),
+      );
+      final data = jsonDecode(response.body);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        await prefs.setString('token', data['access_token']);
+        return;
       }
       throw parseDjangoError(data);
     } catch (e) {

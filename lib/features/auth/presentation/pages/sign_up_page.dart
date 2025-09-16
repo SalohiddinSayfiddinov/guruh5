@@ -113,8 +113,7 @@ class _SignUpPageState extends State<SignUpPage> {
             ScaffoldMessenger.of(
               context,
             ).showSnackBar(SnackBar(content: Text(state.error)));
-          }
-          if (state is AuthSuccess) {
+          } else if (state is AuthSuccess) {
             ScaffoldMessenger.of(
               context,
             ).showSnackBar(SnackBar(content: Text(state.message)));
