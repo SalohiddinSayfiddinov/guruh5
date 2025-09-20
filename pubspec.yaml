@@ -44,6 +44,7 @@ dependencies:
   pinput: ^5.0.2
   shared_preferences: ^2.5.3
   dartz: ^0.10.1
+  dio: ^5.9.0
   # yandex_maps_mapkit_lite: ^4.19.0-beta
 
 dev_dependencies:

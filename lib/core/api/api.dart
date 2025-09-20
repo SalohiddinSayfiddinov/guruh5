@@ -11,7 +11,9 @@ class Api {
   static const String login = "$baseUrl/auth/login";
 
   // home
-  static const String books = "$baseUrl/books";
+  static const String books = "/books";
+  static const String vendors = "$baseUrl/vendors";
+  static const String vendorCategories = "$baseUrl/vendor-categories";
 
   /// HEADERS
   static const Map<String, String> getHeader = {

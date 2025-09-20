@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:guruh5/core/services/dio_handler.dart';
 import 'package:guruh5/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:guruh5/features/auth/presentation/pages/login_page.dart';
+import 'package:guruh5/features/home/data/repos/books_repo.dart';
 import 'package:guruh5/features/home/presentation/cubit/home_cubit.dart';
 import 'package:guruh5/features/home/presentation/pages/home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,7 +32,7 @@ class _SplashPageState extends State<SplashPage> {
         MaterialPageRoute(
           builder:
               (context) => BlocProvider(
-                create: (context) => HomeCubit(),
+                create: (context) => HomeCubit(BooksRepo(DioClient.dio)),
                 child: HomePage(),
               ),
         ),
