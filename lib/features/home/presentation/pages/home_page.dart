@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:guruh5/core/routes/app_pages.dart';
 import 'package:guruh5/features/home/presentation/cubit/home_cubit.dart';
 
 class HomePage extends StatefulWidget {
@@ -19,6 +20,11 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, AppPages.vendors, arguments: 'From home');
+        },
+      ),
       appBar: AppBar(title: Text('Home page')),
       body: BlocBuilder<HomeCubit, HomeState>(
         builder: (context, state) {

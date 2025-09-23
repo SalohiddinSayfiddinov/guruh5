@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guruh5/features/home/presentation/cubit/vendor_category_cubit.dart';
 import 'package:guruh5/features/home/presentation/cubit/vendor_category_state.dart';
@@ -7,7 +6,8 @@ import 'package:guruh5/features/home/presentation/cubit/vendors_cubit.dart';
 import 'package:guruh5/features/home/presentation/cubit/vendors_state.dart';
 
 class VendorsPage extends StatefulWidget {
-  const VendorsPage({super.key});
+  const VendorsPage({super.key, required this.title});
+  final String title;
 
   @override
   State<VendorsPage> createState() => _VendorsPageState();
@@ -24,7 +24,7 @@ class _VendorsPageState extends State<VendorsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Vendors")),
+      appBar: AppBar(title: Text(widget.title)),
       body: BlocBuilder<VendorCategoryCubit, VendorCategoryState>(
         builder: (context, state) {
           if (state is VendorCategoryLoading) {

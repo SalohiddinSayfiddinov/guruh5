@@ -1,11 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:guruh5/core/services/dio_handler.dart';
-import 'package:guruh5/features/auth/presentation/cubit/auth_cubit.dart';
-import 'package:guruh5/features/auth/presentation/pages/login_page.dart';
-import 'package:guruh5/features/home/data/repos/books_repo.dart';
-import 'package:guruh5/features/home/presentation/cubit/home_cubit.dart';
-import 'package:guruh5/features/home/presentation/pages/home_page.dart';
+import 'package:guruh5/core/routes/app_pages.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashPage extends StatefulWidget {
@@ -27,27 +21,15 @@ class _SplashPageState extends State<SplashPage> {
     final String? token = prefs.getString('token');
 
     if (token != null) {
-      Navigator.pushAndRemoveUntil(
+      Navigator.pushNamedAndRemoveUntil(
         context,
-        MaterialPageRoute(
-          builder:
-              (context) => BlocProvider(
-                create: (context) => HomeCubit(BooksRepo(DioClient.dio)),
-                child: HomePage(),
-              ),
-        ),
+        AppPages.home,
         (route) => false,
       );
     } else {
-      Navigator.pushAndRemoveUntil(
+      Navigator.pushNamedAndRemoveUntil(
         context,
-        MaterialPageRoute(
-          builder:
-              (context) => BlocProvider(
-                create: (context) => AuthCubit(),
-                child: LoginPage(),
-              ),
-        ),
+        AppPages.login,
         (route) => false,
       );
     }
