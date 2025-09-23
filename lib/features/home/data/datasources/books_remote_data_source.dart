@@ -4,10 +4,16 @@ import 'package:guruh5/core/error/exception.dart';
 import 'package:guruh5/core/services/error_handler.dart';
 import 'package:guruh5/features/home/data/models/book_model.dart';
 
-class BooksRemoteDataSource {
-  final Dio _dioClient;
-  const BooksRemoteDataSource(this._dioClient);
+abstract class BooksRemoteDataSource {
+  const BooksRemoteDataSource();
+  Future<List<BookModel>> getBooks();
+}
 
+class BooksRemoteDataSourceImpl extends BooksRemoteDataSource {
+  final Dio _dioClient;
+  const BooksRemoteDataSourceImpl(this._dioClient);
+
+  @override
   Future<List<BookModel>> getBooks() async {
     final response = await _dioClient.get(Api.books);
     if (response.statusCode == 200) {

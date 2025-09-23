@@ -6,7 +6,7 @@ import 'package:guruh5/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:guruh5/features/auth/presentation/pages/login_page.dart';
 import 'package:guruh5/features/auth/presentation/pages/splash_page.dart';
 import 'package:guruh5/features/home/data/datasources/books_remote_data_source.dart';
-import 'package:guruh5/features/home/data/repos/books_repo.dart';
+import 'package:guruh5/features/home/data/repos/books_repo_implementation.dart';
 import 'package:guruh5/features/home/data/repos/vendors_repo.dart';
 import 'package:guruh5/features/home/presentation/cubit/home_cubit.dart';
 import 'package:guruh5/features/home/presentation/cubit/vendor_category_cubit.dart';
@@ -26,7 +26,9 @@ class AppRoutes {
               (context) => BlocProvider(
                 create:
                     (context) => HomeCubit(
-                      BooksRepo(BooksRemoteDataSource(DioClient.dio)),
+                      BooksRepoImplementation(
+                        BooksRemoteDataSourceImpl(DioClient.dio),
+                      ),
                     ),
                 child: HomePage(),
               ),

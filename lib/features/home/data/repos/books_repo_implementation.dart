@@ -3,11 +3,13 @@ import 'package:guruh5/core/error/exception.dart';
 import 'package:guruh5/core/error/failure.dart';
 import 'package:guruh5/features/home/data/datasources/books_remote_data_source.dart';
 import 'package:guruh5/features/home/data/models/book_model.dart';
+import 'package:guruh5/features/home/domain/repositories/books_repo.dart';
 
-class BooksRepo {
-  const BooksRepo(this._dataSource);
+class BooksRepoImplementation implements BooksRepo {
+  const BooksRepoImplementation(this._dataSource);
   final BooksRemoteDataSource _dataSource;
 
+  @override
   Future<Either<Failure, List<BookModel>>> getBooks() async {
     try {
       final result = await _dataSource.getBooks();

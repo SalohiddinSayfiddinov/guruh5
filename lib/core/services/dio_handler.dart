@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:guruh5/core/api/api.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DioClient {
   // Private constructor
@@ -14,9 +15,22 @@ class DioClient {
     );
 
     // Example: add an interceptor
-    // _dio.interceptors.add(
-    //   LogInterceptor(request: true, responseBody: true, requestBody: true),
-    // );
+    _dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) async {
+          final SharedPreferences prefs = await SharedPreferences.getInstance();
+          final String? token = prefs.getString('token');
+          if (token != null) {
+            options.headers['Authorization'] = 'Bearer $token';
+          }
+          return handler.next(options);
+        },
+        onResponse: (response, handler) {
+          return handler.next(response);
+        },
+      ),
+      // LogInterceptor(request: true, responseBody: true, requestBody: true),
+    );
   }
 
   late final Dio _dio;
