@@ -15,6 +15,9 @@ class Api {
   static const String vendors = "$baseUrl/vendors";
   static const String vendorCategories = "$baseUrl/vendor-categories";
 
+  // profile
+  static const String profile = "/auth/profile";
+
   /// HEADERS
   static const Map<String, String> getHeader = {
     'Content-Type': 'application/json',

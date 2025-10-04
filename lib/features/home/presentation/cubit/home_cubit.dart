@@ -3,9 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:guruh5/core/error/failure.dart';
 import 'package:guruh5/features/home/data/models/book_model.dart';
 import 'package:guruh5/features/home/domain/repositories/books_repo.dart';
+import 'package:injectable/injectable.dart';
 
 part 'home_state.dart';
 
+@injectable
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit(this._repo) : super(HomeInit());
   final BooksRepo _repo;

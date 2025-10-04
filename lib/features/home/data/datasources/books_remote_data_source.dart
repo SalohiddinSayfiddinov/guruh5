@@ -3,12 +3,14 @@ import 'package:guruh5/core/api/api.dart';
 import 'package:guruh5/core/error/exception.dart';
 import 'package:guruh5/core/services/error_handler.dart';
 import 'package:guruh5/features/home/data/models/book_model.dart';
+import 'package:injectable/injectable.dart';
 
 abstract class BooksRemoteDataSource {
   const BooksRemoteDataSource();
   Future<List<BookModel>> getBooks();
 }
 
+@LazySingleton(as: BooksRemoteDataSource)
 class BooksRemoteDataSourceImpl extends BooksRemoteDataSource {
   final Dio _dioClient;
   const BooksRemoteDataSourceImpl(this._dioClient);

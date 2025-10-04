@@ -4,7 +4,9 @@ import 'package:guruh5/core/error/failure.dart';
 import 'package:guruh5/features/home/data/datasources/books_remote_data_source.dart';
 import 'package:guruh5/features/home/data/models/book_model.dart';
 import 'package:guruh5/features/home/domain/repositories/books_repo.dart';
+import 'package:injectable/injectable.dart';
 
+@LazySingleton(as: BooksRepo)
 class BooksRepoImplementation implements BooksRepo {
   const BooksRepoImplementation(this._dataSource);
   final BooksRemoteDataSource _dataSource;

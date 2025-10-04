@@ -23,7 +23,7 @@ class _SplashPageState extends State<SplashPage> {
     if (token != null) {
       Navigator.pushNamedAndRemoveUntil(
         context,
-        AppPages.home,
+        AppPages.profile,
         (route) => false,
       );
     } else {

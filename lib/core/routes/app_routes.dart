@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:guruh5/core/di/injection.dart';
 import 'package:guruh5/core/routes/app_pages.dart';
-import 'package:guruh5/core/services/dio_handler.dart';
 import 'package:guruh5/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:guruh5/features/auth/presentation/pages/login_page.dart';
 import 'package:guruh5/features/auth/presentation/pages/splash_page.dart';
-import 'package:guruh5/features/home/data/datasources/books_remote_data_source.dart';
-import 'package:guruh5/features/home/data/repos/books_repo_implementation.dart';
 import 'package:guruh5/features/home/data/repos/vendors_repo.dart';
 import 'package:guruh5/features/home/presentation/cubit/home_cubit.dart';
 import 'package:guruh5/features/home/presentation/cubit/vendor_category_cubit.dart';
 import 'package:guruh5/features/home/presentation/cubit/vendors_cubit.dart';
 import 'package:guruh5/features/home/presentation/pages/home_page.dart';
 import 'package:guruh5/features/home/presentation/pages/vendors_page.dart';
+import 'package:guruh5/features/profile/presentation/cubit/image_cubit.dart';
+import 'package:guruh5/features/profile/presentation/cubit/profile_cubit.dart';
+import 'package:guruh5/features/profile/presentation/pages/profile_page.dart';
 
 class AppRoutes {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -24,12 +25,7 @@ class AppRoutes {
         return MaterialPageRoute(
           builder:
               (context) => BlocProvider(
-                create:
-                    (context) => HomeCubit(
-                      BooksRepoImplementation(
-                        BooksRemoteDataSourceImpl(DioClient.dio),
-                      ),
-                    ),
+                create: (context) => sl<HomeCubit>(),
                 child: HomePage(),
               ),
         );
@@ -60,6 +56,17 @@ class AppRoutes {
           );
         }
         return _noArgsRoute();
+      case AppPages.profile:
+        return MaterialPageRoute(
+          builder:
+              (context) => MultiBlocProvider(
+                providers: [
+                  BlocProvider(create: (context) => ImageCubit()),
+                  BlocProvider(create: (context) => sl<ProfileCubit>()),
+                ],
+                child: ProfilePage(),
+              ),
+        );
       default:
         return _errorRoute();
     }
