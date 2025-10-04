@@ -5,4 +5,5 @@ class AppPages {
   static const String login = '/login';
   static const String vendors = '/vendors';
   static const String profile = '/profile';
+  static const String account = '/account';
 }
