@@ -8,6 +8,12 @@
 	<string>This app requires camera access to take photos.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>This app requires microphone access to record audio.</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>en</string>
+		<string>ru</string>
+		<string>uz</string>
+	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
