@@ -1,14 +1,19 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:guruh5/animations/animation_page.dart';
 import 'package:guruh5/core/di/injection.dart';
 import 'package:guruh5/core/locale/codegen_loader.g.dart';
 import 'package:guruh5/firebase/cubit/auth_cubit.dart';
+import 'package:guruh5/firebase/cubit/firebase_cubit.dart';
 import 'package:guruh5/firebase/data/auth_service.dart';
+import 'package:guruh5/firebase/data/firestore_service.dart';
+import 'package:guruh5/firebase/pages/f_home_page.dart';
 import 'package:guruh5/firebase/pages/f_signup_page.dart';
 import 'package:guruh5/firebase_options.dart';
+import 'package:guruh5/mock/pages/mock_page.dart';
 import 'package:guruh5/providers/theme_provider.dart';
 import 'package:guruh5/test_page.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +22,7 @@ import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await EasyLocalization.ensureInitialized();
   await configureDependencies();
   // await initMapkit(apiKey: 'Your key');
@@ -49,50 +54,50 @@ class MyApp extends StatelessWidget {
       theme: context.watch<ThemeProvider>().getCurrentTheme,
       // onGenerateRoute: AppRoutes.generateRoute,
       // initialRoute: AppPages.profile,
-      home: AuthGate(),
+      home: AnimationPage(),
     );
   }
 }
 
-class AuthGate extends StatefulWidget {
-  const AuthGate({super.key});
+// class AuthGate extends StatefulWidget {
+//   const AuthGate({super.key});
 
-  @override
-  State<AuthGate> createState() => _AuthGateState();
-}
+//   @override
+//   State<AuthGate> createState() => _AuthGateState();
+// }
 
-class _AuthGateState extends State<AuthGate> {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => TestPage()),
-          (route) => false,
-        );
-      } else {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder:
-                (context) => BlocProvider(
-                  create: (context) => FAuthCubit(AuthService()),
-                  child: FSignupPage(),
-                ),
-          ),
-          (route) => false,
-        );
-      }
-    });
-  }
+// class _AuthGateState extends State<AuthGate> {
+//   @override
+//   void initState() {
+//     super.initState();
+//     WidgetsBinding.instance.addPostFrameCallback((_) {
+//       final user = FirebaseAuth.instance.currentUser;
+//       if (user != null) {
+//         Navigator.pushAndRemoveUntil(
+//           context,
+//           MaterialPageRoute(builder: (context) => TestPage()),
+//           (route) => false,
+//         );
+//       } else {
+//         Navigator.pushAndRemoveUntil(
+//           context,
+//           MaterialPageRoute(
+//             builder:
+//                 (context) => BlocProvider(
+//                   create: (context) => FAuthCubit(AuthService()),
+//                   child: FSignupPage(),
+//                 ),
+//           ),
+//           (route) => false,
+//         );
+//       }
+//     });
+//   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(child: Text('GAte', style: TextStyle(fontSize: 44.0))),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: Center(child: Text('GAte', style: TextStyle(fontSize: 44.0))),
+//     );
+//   }
+// }

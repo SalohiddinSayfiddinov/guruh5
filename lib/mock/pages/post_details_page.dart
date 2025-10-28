@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:guruh5/features/home/data/models/post_model.dart';
 
 class PostDetailsPage extends StatelessWidget {
-  final Map<String, dynamic> post;
+  final Post post;
   const PostDetailsPage({super.key, required this.post});
 
   @override
@@ -12,9 +13,9 @@ class PostDetailsPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(post['id'].toString()),
-            Text(post['title']),
-            Text(post['body']),
+            Text(post.id.toString()),
+            Text(post.title),
+            Text(post.body),
           ],
         ),
       ),

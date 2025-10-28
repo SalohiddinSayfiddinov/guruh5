@@ -54,7 +54,10 @@ dependencies:
   # google_maps_flutter: ^2.13.1
   image_picker: ^1.2.0
   firebase_core: ^4.2.0
-  firebase_auth: ^6.1.1
+  # firebase_auth: ^6.1.1
+  # cloud_firestore: ^6.0.3
+  firebase_messaging: ^16.0.3
+  flutter_animate: ^4.5.2
   # yandex_maps_mapkit_lite: ^4.19.0-beta
 
 dev_dependencies:
